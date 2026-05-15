@@ -248,11 +248,13 @@ jobs:
             echo "=== Building $lib ==="
             cd src/$lib
             ./autogen.sh 2>&1 | tail -3 || true
+            CONFIGURE_FLAGS="--prefix=$STAGING --enable-static --disable-shared"
             if [ "$lib" = "libimobiledevice" ]; then
-              PKG_CONFIG_PATH="$PKGCONF" ./configure --prefix="$STAGING" --enable-static --disable-shared --without-readline CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
-            else
-              PKG_CONFIG_PATH="$PKGCONF" ./configure --prefix="$STAGING" --enable-static --disable-shared CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+              CONFIGURE_FLAGS="$CONFIGURE_FLAGS --without-readline"
+            elif [ "$lib" = "libirecovery" ]; then
+              CONFIGURE_FLAGS="$CONFIGURE_FLAGS --with-udevrulesdir=$STAGING/etc/udev/rules.d"
             fi
+            PKG_CONFIG_PATH="$PKGCONF" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
             make -j$JOBS; make install
             cd ../..
           done
@@ -318,11 +320,13 @@ jobs:
             echo "=== Building $lib ==="
             cd src/$lib
             ./autogen.sh 2>&1 | tail -3 || true
+            CONFIGURE_FLAGS="--prefix=$STAGING --enable-static --disable-shared"
             if [ "$lib" = "libimobiledevice" ]; then
-              PKG_CONFIG_PATH="$PKGCONF" ./configure --prefix="$STAGING" --enable-static --disable-shared --without-readline CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
-            else
-              PKG_CONFIG_PATH="$PKGCONF" ./configure --prefix="$STAGING" --enable-static --disable-shared CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+              CONFIGURE_FLAGS="$CONFIGURE_FLAGS --without-readline"
+            elif [ "$lib" = "libirecovery" ]; then
+              CONFIGURE_FLAGS="$CONFIGURE_FLAGS --with-udevrulesdir=$STAGING/etc/udev/rules.d"
             fi
+            PKG_CONFIG_PATH="$PKGCONF" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
             make -j$JOBS; make install
             cd ../..
           done
@@ -390,7 +394,8 @@ jobs:
       - name: Build all libraries
         run: |
           STAGING="$(pwd)/staging"
-          CFLAGS="-I$STAGING/include"
+          # Static lib defines for Windows — prevent __declspec(dllimport) in headers
+          CFLAGS="-I$STAGING/include -DLIBPLIST_STATIC -DLIMD_GLUE_STATIC -DLIBUSBMUXD_STATIC -DLIBIRECOVERY_STATIC -DLIBIMOBILEDEVICE_STATIC -DLIBIDEVICEACTIVATION_STATIC"
           LDFLAGS="-L$STAGING/lib"
           PKGCONF="$STAGING/lib/pkgconfig"
           JOBS=$(nproc)
@@ -399,11 +404,11 @@ jobs:
             echo "=== Building $lib ==="
             cd src/$lib
             ./autogen.sh 2>&1 | tail -3 || true
+            CONFIGURE_FLAGS="--prefix=$STAGING --enable-static --disable-shared"
             if [ "$lib" = "libimobiledevice" ]; then
-              PKG_CONFIG_PATH="$PKGCONF" ./configure --prefix="$STAGING" --enable-static --disable-shared --without-readline CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
-            else
-              PKG_CONFIG_PATH="$PKGCONF" ./configure --prefix="$STAGING" --enable-static --disable-shared CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+              CONFIGURE_FLAGS="$CONFIGURE_FLAGS --without-readline"
             fi
+            PKG_CONFIG_PATH="$PKGCONF" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
             make -j$JOBS; make install
             cd ../..
           done
