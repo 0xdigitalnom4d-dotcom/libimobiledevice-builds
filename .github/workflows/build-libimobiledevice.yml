@@ -3,8 +3,6 @@ name: Build libimobiledevice Static Libraries
 on:
   push:
     branches: [main]
-    paths:
-      - '.github/workflows/build-libimobiledevice.yml'
   workflow_dispatch:
     inputs:
       ref:
