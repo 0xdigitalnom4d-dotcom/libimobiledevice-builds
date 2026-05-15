@@ -1,0 +1,8 @@
+staging/
+*.o
+*.lo
+*.la
+.DS_Store
+/tmp/
+src/
+MacOSX-SDKs/
