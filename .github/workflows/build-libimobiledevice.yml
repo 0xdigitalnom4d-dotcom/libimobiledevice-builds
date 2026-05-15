@@ -172,16 +172,16 @@ jobs:
           STAGING="$(pwd)/staging"
           CFLAGS="-arch x86_64 -mmacosx-version-min=10.14 -I$STAGING/include"
           LDFLAGS="-arch x86_64 -mmacosx-version-min=10.14 -L$STAGING/lib"
-          PKGCONF="$STAGING/lib/pkgconfig"
+          PKG_CONFIG_PATH="$STAGING/lib/pkgconfig"
 
           for lib in libplist libimobiledevice-glue libusbmuxd libtatsu libirecovery libimobiledevice libideviceactivation; do
             echo "=== Building $lib ==="
             cd src/$lib
             ./autogen.sh 2>&1 | tail -3 || true
             if [ "$lib" = "libimobiledevice" ]; then
-              PKG_CONFIG_PATH="$PKGCONF" ./configure --prefix="$STAGING" --enable-static --disable-shared --without-readline CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+              PKG_CONFIG_PATH="$PKG_CONFIG_PATH" ./configure --prefix="$STAGING" --enable-static --disable-shared --without-readline CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
             else
-              PKG_CONFIG_PATH="$PKGCONF" ./configure --prefix="$STAGING" --enable-static --disable-shared CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+              PKG_CONFIG_PATH="$PKG_CONFIG_PATH" ./configure --prefix="$STAGING" --enable-static --disable-shared CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
             fi
             make -j$(sysctl -n hw.logicalcpu); make install
             cd ../..
@@ -241,7 +241,7 @@ jobs:
           STAGING="$(pwd)/staging"
           CFLAGS="-I$STAGING/include"
           LDFLAGS="-L$STAGING/lib"
-          PKGCONF="$STAGING/lib/pkgconfig"
+          PKG_CONFIG_PATH="$STAGING/lib/pkgconfig"
           JOBS=$(nproc)
 
           for lib in libplist libimobiledevice-glue libusbmuxd libtatsu libirecovery libimobiledevice libideviceactivation; do
@@ -254,7 +254,7 @@ jobs:
             elif [ "$lib" = "libirecovery" ]; then
               CONFIGURE_FLAGS="$CONFIGURE_FLAGS --with-udevrulesdir=$STAGING/etc/udev/rules.d"
             fi
-            PKG_CONFIG_PATH="$PKGCONF" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+            PKG_CONFIG_PATH="$PKG_CONFIG_PATH" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
             make -j$JOBS; make install
             cd ../..
           done
@@ -313,7 +313,7 @@ jobs:
           STAGING="$(pwd)/staging"
           CFLAGS="-I$STAGING/include"
           LDFLAGS="-L$STAGING/lib"
-          PKGCONF="$STAGING/lib/pkgconfig"
+          PKG_CONFIG_PATH="$STAGING/lib/pkgconfig"
           JOBS=$(nproc)
 
           for lib in libplist libimobiledevice-glue libusbmuxd libtatsu libirecovery libimobiledevice libideviceactivation; do
@@ -326,7 +326,7 @@ jobs:
             elif [ "$lib" = "libirecovery" ]; then
               CONFIGURE_FLAGS="$CONFIGURE_FLAGS --with-udevrulesdir=$STAGING/etc/udev/rules.d"
             fi
-            PKG_CONFIG_PATH="$PKGCONF" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+            PKG_CONFIG_PATH="$PKG_CONFIG_PATH" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
             make -j$JOBS; make install
             cd ../..
           done
@@ -397,8 +397,7 @@ jobs:
           # Static lib defines for Windows — prevent __declspec(dllimport) in headers
           CFLAGS="-I$STAGING/include -DLIBPLIST_STATIC -DLIMD_GLUE_STATIC -DLIBUSBMUXD_STATIC -DLIBIRECOVERY_STATIC -DLIBIMOBILEDEVICE_STATIC -DLIBIDEVICEACTIVATION_STATIC"
           LDFLAGS="-L$STAGING/lib"
-          PKGCONF="$STAGING/lib/pkgconfig"
-          JOBS=$(nproc)
+          PKG_CONFIG_PATH="$STAGING/lib/pkgconfig"
 
           for lib in libplist libimobiledevice-glue libusbmuxd libtatsu libirecovery libimobiledevice libideviceactivation; do
             echo "=== Building $lib ==="
@@ -408,7 +407,7 @@ jobs:
             if [ "$lib" = "libimobiledevice" ]; then
               CONFIGURE_FLAGS="$CONFIGURE_FLAGS --without-readline"
             fi
-            PKG_CONFIG_PATH="$PKGCONF" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
+            PKG_CONFIG_PATH="$PKG_CONFIG_PATH" ./configure $CONFIGURE_FLAGS CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
             make -j$JOBS; make install
             cd ../..
           done
