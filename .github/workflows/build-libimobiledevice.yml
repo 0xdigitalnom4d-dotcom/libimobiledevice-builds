@@ -454,27 +454,27 @@ jobs:
           unzip -o macos-universal/macos-universal.zip -d libimobiledevice-libs/macos-universal/
           unzip -o windows-x86_64/windows-x86_64.zip -d libimobiledevice-libs/windows-x86_64/
           cat > libimobiledevice-libs/README.md << 'EOF'
-      # libimobiledevice Static Libraries
+          # libimobiledevice Static Libraries
 
-      Prebuilt static libraries (.a) and headers for all platforms.
+          Prebuilt static libraries (.a) and headers for all platforms.
 
-      ## Directory layout
+          ## Directory layout
 
-      Each platform directory contains:
-      - `include/` — C/C++ headers
-      - `lib/` — static libraries (.a)
+          Each platform directory contains:
+          - `include/` — C/C++ headers
+          - `lib/` — static libraries (.a)
 
-      ## Platforms
+          ## Platforms
 
-      - `macos-universal/` — macOS arm64 + x86_64 fat binaries
-      - `linux-x86_64/` — Linux x86_64 (glibc)
-      - `linux-aarch64/` — Linux ARM64 (glibc)
-      - `windows-x86_64/` — Windows x86_64 (MinGW)
+          - `macos-universal/` — macOS arm64 + x86_64 fat binaries
+          - `linux-x86_64/` — Linux x86_64 (glibc)
+          - `linux-aarch64/` — Linux ARM64 (glibc)
+          - `windows-x86_64/` — Windows x86_64 (MinGW)
 
-      ## Usage (Flutter)
+          ## Usage (Flutter)
 
-      See FLUTTER_INTEGRATION.md for Flutter FFI integration guide.
-      EOF
+          See FLUTTER_INTEGRATION.md for Flutter FFI integration guide.
+          EOF
           tar czf libimobiledevice-libs.tar.gz libimobiledevice-libs/
 
       - name: Upload combined artifact
