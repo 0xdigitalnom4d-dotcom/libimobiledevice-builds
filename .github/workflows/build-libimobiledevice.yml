@@ -398,6 +398,7 @@ jobs:
           CFLAGS="-I$STAGING/include -DLIBPLIST_STATIC -DLIMD_GLUE_STATIC -DLIBUSBMUXD_STATIC -DLIBIRECOVERY_STATIC -DLIBIMOBILEDEVICE_STATIC -DLIBIDEVICEACTIVATION_STATIC"
           LDFLAGS="-L$STAGING/lib"
           PKG_CONFIG_PATH="$STAGING/lib/pkgconfig"
+          JOBS=$(nproc)
 
           for lib in libplist libimobiledevice-glue libusbmuxd libtatsu libirecovery libimobiledevice libideviceactivation; do
             echo "=== Building $lib ==="
